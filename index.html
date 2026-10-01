@@ -1,208 +1,578 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Education Automation Framework</title>
-  <style>
-    :root {
-      --bg: #0b1020;
-      --card: #121a2e;
-      --border: #24304d;
-      --text: #eef2ff;
-      --muted: #9aa7c7;
-      --green: #22c55e;
-      --yellow: #eab308;
-      --red: #ef4444;
-      --blue: #3b82f6;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; font-family: Tahoma, Arial, sans-serif;
-      background: radial-gradient(circle at top, #162344, var(--bg) 55%);
-      color: var(--text);
-    }
-    .container { max-width: 1050px; margin: auto; padding: 28px 16px 50px; }
-    .hero { margin-bottom: 20px; }
-    .hero h1 { margin: 0 0 8px; font-size: 30px; }
-    .hero p { color: var(--muted); margin: 0; line-height: 1.8; }
-    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-    .card {
-      background: rgba(18,26,46,.94); border: 1px solid var(--border);
-      border-radius: 18px; padding: 20px; box-shadow: 0 18px 50px rgba(0,0,0,.22);
-    }
-    .full { grid-column: 1 / -1; }
-    label { display:block; margin: 0 0 8px; font-weight: 700; }
-    input {
-      width: 100%; padding: 13px 14px; border-radius: 11px;
-      border: 1px solid #31405f; background: #0b1223; color: var(--text);
-      outline: none; margin-bottom: 14px;
-    }
-    input:focus { border-color: var(--blue); }
-    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 4px; }
-    button {
-      border: 0; border-radius: 11px; color: white; padding: 12px 18px;
-      font-weight: 800; cursor: pointer; transition: .15s transform, .15s opacity;
-    }
-    button:hover { transform: translateY(-1px); }
-    button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
-    .start { background: var(--green); color:#06210e; }
-    .pause { background: var(--yellow); color:#211b00; }
-    .resume { background: var(--blue); }
-    .stop { background: var(--red); }
-    .status { display:flex; gap:10px; align-items:center; margin-top: 14px; color: var(--muted); }
-    .dot { width:10px; height:10px; border-radius:50%; background:#64748b; }
-    .dot.running { background: var(--green); box-shadow:0 0 14px rgba(34,197,94,.7); }
-    .log {
-      height: 390px; overflow:auto; background:#05070d; border:1px solid #1e293b;
-      border-radius:14px; padding:14px; direction:ltr; font-family:
-      ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-    }
-    .line { padding:4px 0; white-space:pre-wrap; word-break:break-word; }
-    .time { color:#64748b; }
-    .info { color:#dbeafe; } .success { color:#86efac; }
-    .warning { color:#fde68a; } .error { color:#fca5a5; }
-    .support { line-height:1.8; }
-    .support a { color:#7dd3fc; font-weight:800; text-decoration:none; }
-    .notice { font-size: 13px; color:#aeb9d4; background:#0b1223; border-radius:10px; padding:10px 12px; margin-top:12px; }
-    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } .full { grid-column:auto; } }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>أداة الأتمتة التعليمية | Education Automation</title>
+<style>
+  :root {
+    --bg-1: #0f172a;
+    --bg-2: #1e293b;
+    --card: #111827;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --green: #22c55e;
+    --green-h: #16a34a;
+    --yellow: #eab308;
+    --yellow-h: #ca8a04;
+    --red: #ef4444;
+    --red-h: #dc2626;
+    --blue: #3b82f6;
+    --term-bg: #000000;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 24px 16px 0;
+  }
+
+  .container {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+
+  header h1 {
+    font-size: 30px;
+    font-weight: 800;
+    background: linear-gradient(90deg, #22c55e, #3b82f6, #8b5cf6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+  }
+
+  header p {
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  .card h2 {
+    font-size: 18px;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #f1f5f9;
+  }
+
+  .card h2::before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 18px;
+    background: var(--blue);
+    border-radius: 2px;
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 14px;
+    background: #0b1220;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 14px;
+    transition: all .2s;
+    font-family: inherit;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--blue);
+    box-shadow: 0 0 0 3px rgba(59,130,246,.15);
+  }
+
+  .form-group input::placeholder { color: #64748b; }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  @media (max-width: 640px) {
+    .buttons { grid-template-columns: 1fr; }
+  }
+
+  button {
+    padding: 13px 18px;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    color: #fff;
+    transition: all .2s;
+    font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  button:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+  }
+
+  .btn-start { background: var(--green); }
+  .btn-start:hover:not(:disabled) { background: var(--green-h); transform: translateY(-2px); }
+
+  .btn-pause { background: var(--yellow); color: #000; }
+  .btn-pause:hover:not(:disabled) { background: var(--yellow-h); transform: translateY(-2px); }
+
+  .btn-stop { background: var(--red); }
+  .btn-stop:hover:not(:disabled) { background: var(--red-h); transform: translateY(-2px); }
+
+  .status-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    background: #0b1220;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #64748b;
+    transition: all .3s;
+  }
+
+  .status-dot.running {
+    background: var(--green);
+    box-shadow: 0 0 10px var(--green);
+    animation: pulse 1.4s infinite;
+  }
+  .status-dot.paused { background: var(--yellow); box-shadow: 0 0 10px var(--yellow); }
+  .status-dot.stopped { background: var(--red); }
+  .status-dot.finished { background: var(--blue); box-shadow: 0 0 10px var(--blue); }
+  .status-dot.error { background: var(--red); animation: pulse 1s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .35; }
+  }
+
+  .terminal {
+    background: var(--term-bg);
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 14px;
+    height: 380px;
+    overflow-y: auto;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.7;
+    direction: ltr;
+    text-align: left;
+    scrollbar-width: thin;
+    scrollbar-color: #334155 #000;
+  }
+
+  .terminal::-webkit-scrollbar { width: 8px; }
+  .terminal::-webkit-scrollbar-track { background: #000; }
+  .terminal::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+
+  .log-line {
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding: 2px 0;
+    border-bottom: 1px solid #0f172a;
+  }
+
+  .log-line .time { color: #64748b; margin-right: 8px; }
+
+  .log-line.info    .msg { color: #e2e8f0; }
+  .log-line.success .msg { color: #4ade80; }
+  .log-line.warn    .msg { color: #facc15; }
+  .log-line.error   .msg { color: #f87171; font-weight: 600; }
+  .log-line.progress .msg { color: #60a5fa; }
+
+  .support {
+    background: linear-gradient(135deg, #0b1220, #111827);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 22px;
+    margin-bottom: 24px;
+    text-align: center;
+  }
+
+  .support h3 {
+    font-size: 16px;
+    margin-bottom: 8px;
+    color: #f1f5f9;
+  }
+
+  .support p {
+    color: var(--muted);
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+
+  .support-links {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .support-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 14px;
+    transition: all .2s;
+  }
+
+  .support-links a.telegram { background: #229ED9; color: #fff; }
+  .support-links a.telegram:hover { background: #1b86b8; transform: translateY(-2px); }
+
+  .support-links a.whatsapp { background: #25D366; color: #fff; }
+  .support-links a.whatsapp:hover { background: #1da851; transform: translateY(-2px); }
+
+  footer {
+    text-align: center;
+    padding: 18px 0;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 10px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: #111827;
+    border: 1px solid var(--border);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-size: 14px;
+    transition: transform .3s;
+    z-index: 9999;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  .toast.error { border-color: var(--red); }
+  .toast.success { border-color: var(--green); }
+</style>
 </head>
 <body>
 <div class="container">
-  <section class="hero">
-    <h1>منصة أتمتة تعليمية</h1>
-    <p>إطار عام لفحص المنصات والتحكم بجلسة المتصفح مع سجل حي ومعالجة أخطاء قوية.</p>
-  </section>
 
-  <div class="grid">
-    <section class="card">
-      <h2>إعداد المهمة</h2>
-      <label for="url">رابط المنصة</label>
-      <input id="url" type="url" placeholder="https://example.com" autocomplete="url">
+  <header>
+    <h1>🤖 أداة الأتمتة التعليمية</h1>
+    <p>حل تلقائي ذكي للمنصات التعليمية • API + Headless Browser</p>
+  </header>
 
-      <label for="username">اسم المستخدم / الرقم</label>
-      <input id="username" type="text" autocomplete="username">
+  <!-- بطاقة الإدخال -->
+  <div class="card">
+    <h2>بيانات الدخول للمنصة</h2>
 
-      <label for="password">كلمة المرور</label>
-      <input id="password" type="password" autocomplete="current-password">
+    <div class="form-group">
+      <label for="platformUrl">🔗 رابط المنصة</label>
+      <input type="text" id="platformUrl" placeholder="https://example.edu/login" />
+    </div>
 
-      <div class="actions">
-        <button class="start" id="startBtn">ابدأ الأتمتة</button>
-        <button class="pause" id="pauseBtn">إيقاف مؤقت</button>
-        <button class="resume" id="resumeBtn">استئناف</button>
-        <button class="stop" id="stopBtn">إيقاف نهائي</button>
-      </div>
+    <div class="form-group">
+      <label for="username">👤 اسم المستخدم / الرقم القومي</label>
+      <input type="text" id="username" placeholder="أدخل اسم المستخدم أو الرقم القومي" />
+    </div>
 
-      <div class="status">
-        <span class="dot" id="dot"></span>
-        <span id="statusText">جاهز</span>
-      </div>
+    <div class="form-group">
+      <label for="password">🔒 كلمة المرور</label>
+      <input type="password" id="password" placeholder="أدخل كلمة المرور" />
+    </div>
 
-      <div class="notice">
-        للاستخدام على الأنظمة التي تملك تصريحاً لاختبارها أو أتمتتها. لا يقوم هذا المشروع
-        بحل أو إرسال إجابات اختبارات/واجبات نيابةً عن الطالب.
-      </div>
-    </section>
-
-    <section class="card">
-      <h2>سجل التشغيل</h2>
-      <div id="log" class="log"></div>
-    </section>
-
-    <section class="card full support">
-      <h2>الدعم والتواصل مع المطور</h2>
-      <p>ضع بيانات التواصل الخاصة بك هنا قبل النشر:</p>
-      <p>
-        Telegram:
-        <a href="https://t.me/your_username" target="_blank" rel="noopener">@your_username</a>
-        <br>
-        WhatsApp:
-        <a href="https://wa.me/201000000000" target="_blank" rel="noopener">+20 100 000 0000</a>
-      </p>
-    </section>
+    <div class="buttons">
+      <button id="btnStart" class="btn-start">▶️ ابدأ الحل التلقائي</button>
+      <button id="btnPause" class="btn-pause" disabled>⏸️ إيقاف مؤقت</button>
+      <button id="btnStop"  class="btn-stop"  disabled>⏹️ إيقاف نهائي</button>
+    </div>
   </div>
+
+  <!-- بطاقة السجلات -->
+  <div class="card">
+    <h2>سجلات التشغيل الحية (Live Logs)</h2>
+
+    <div class="status-bar">
+      <span class="status-dot" id="statusDot"></span>
+      <span id="statusText">الحالة: خامل</span>
+    </div>
+
+    <div class="terminal" id="terminal">
+      <div class="log-line info">
+        <span class="time">[جاهز]</span>
+        <span class="msg">في انتظار بدء العملية...</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- بطاقة الدعم -->
+  <div class="support">
+    <h3>💬 الدعم والتواصل مع المطور</h3>
+    <p>هل تواجه مشكلة أو لديك استفسار؟ تواصل معنا مباشرةً:</p>
+    <div class="support-links">
+      <a class="telegram"  href="https://t.me/YourUsername"  target="_blank" rel="noopener">📨 Telegram</a>
+      <a class="whatsapp"  href="https://wa.me/201000000000" target="_blank" rel="noopener">💚 WhatsApp</a>
+    </div>
+  </div>
+
+  <footer>
+    Education Automation Framework © 2025 — جميع الحقوق محفوظة
+  </footer>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 (() => {
-  const $ = (id) => document.getElementById(id);
-  const logBox = $("log");
-  const startBtn = $("startBtn"), pauseBtn = $("pauseBtn");
-  const resumeBtn = $("resumeBtn"), stopBtn = $("stopBtn");
-  const dot = $("dot"), statusText = $("statusText");
+  "use strict";
 
-  function addLog(item) {
-    const row = document.createElement("div");
-    row.className = "line " + (item.level || "info");
-    const time = document.createElement("span");
-    time.className = "time";
-    time.textContent = `[${item.time}] `;
-    const msg = document.createElement("span");
-    msg.textContent = item.message || "";
-    row.append(time, msg);
-    logBox.appendChild(row);
-    logBox.scrollTop = logBox.scrollHeight;
+  // ============================================================
+  // عناصر DOM
+  // ============================================================
+  const $url       = document.getElementById("platformUrl");
+  const $user      = document.getElementById("username");
+  const $pass      = document.getElementById("password");
+  const $btnStart  = document.getElementById("btnStart");
+  const $btnPause  = document.getElementById("btnPause");
+  const $btnStop   = document.getElementById("btnStop");
+  const $terminal  = document.getElementById("terminal");
+  const $statusDot = document.getElementById("statusDot");
+  const $statusText= document.getElementById("statusText");
+  const $toast     = document.getElementById("toast");
+
+  let eventSource = null;
+  let toastTimer  = null;
+
+  // ============================================================
+  // أدوات مساعدة
+  // ============================================================
+  function showToast(msg, type = "info") {
+    $toast.textContent = msg;
+    $toast.className = "toast show " + type;
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      $toast.className = "toast " + type;
+    }, 3000);
   }
 
-  function setState(running, paused) {
-    dot.classList.toggle("running", running);
-    statusText.textContent = !running ? "جاهز" : (paused ? "متوقف مؤقتاً" : "يعمل");
-    startBtn.disabled = running;
-    pauseBtn.disabled = !running || paused;
-    resumeBtn.disabled = !running || !paused;
-    stopBtn.disabled = !running;
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
   }
 
-  async function post(path) {
-    const response = await fetch(path, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: path === "/api/start" ? JSON.stringify({
-        url: $("url").value.trim(),
-        username: $("username").value.trim(),
-        password: $("password").value
-      }) : "{}"
+  function appendLog(entry) {
+    const line = document.createElement("div");
+    line.className = "log-line " + (entry.level || "info");
+    line.innerHTML =
+      `<span class="time">[${escapeHtml(entry.time || "")}]</span>` +
+      `<span class="msg">${escapeHtml(entry.message || "")}</span>`;
+    $terminal.appendChild(line);
+    // تمرير تلقائي للأسفل
+    $terminal.scrollTop = $terminal.scrollHeight;
+  }
+
+  function setStatus(status) {
+    const map = {
+      idle:     { text: "الحالة: خامل",        cls: ""        },
+      running:  { text: "الحالة: قيد التشغيل", cls: "running" },
+      paused:   { text: "الحالة: موقوف مؤقتاً", cls: "paused"  },
+      stopped:  { text: "الحالة: تم الإيقاف",  cls: "stopped" },
+      finished: { text: "الحالة: اكتمل بنجاح", cls: "finished"},
+      error:    { text: "الحالة: خطأ",         cls: "error"   },
+    };
+    const s = map[status] || map.idle;
+    $statusText.textContent = s.text;
+    $statusDot.className = "status-dot " + s.cls;
+
+    const running = status === "running" || status === "paused";
+    $btnStart.disabled = running;
+    $btnPause.disabled = !running;
+    $btnStop.disabled  = !running;
+
+    if (status === "running") {
+      $btnPause.textContent = "⏸️ إيقاف مؤقت";
+    } else if (status === "paused") {
+      $btnPause.textContent = "▶️ استئناف";
+    }
+  }
+
+  // ============================================================
+  // الاتصال ببث السجلات (SSE)
+  // ============================================================
+  function connectLogsStream() {
+    if (eventSource) {
+      try { eventSource.close(); } catch (e) {}
+    }
+    eventSource = new EventSource("/api/logs/stream");
+
+    eventSource.onmessage = (e) => {
+      try {
+        const entry = JSON.parse(e.data);
+        appendLog(entry);
+      } catch (err) {
+        console.warn("log parse error", err);
+      }
+    };
+
+    eventSource.onerror = () => {
+      console.warn("SSE disconnected, retrying...");
+      // المتصفح يعيد الاتصال تلقائياً
+    };
+  }
+
+  // ============================================================
+  // استدعاءات API
+  // ============================================================
+  async function apiCall(path, options = {}) {
+    const res = await fetch(path, {
+      method: options.method || "GET",
+      headers: { "Content-Type": "application/json" },
+      body: options.body ? JSON.stringify(options.body) : undefined,
     });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    let data = {};
+    try { data = await res.json(); } catch (e) { data = {}; }
+    if (!res.ok) {
+      throw new Error(data.message || `HTTP ${res.status}`);
+    }
     return data;
   }
 
-  startBtn.onclick = async () => {
-    try { await post("/api/start"); }
-    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
-  };
-  pauseBtn.onclick = async () => {
-    try { await post("/api/pause"); }
-    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
-  };
-  resumeBtn.onclick = async () => {
-    try { await post("/api/resume"); }
-    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
-  };
-  stopBtn.onclick = async () => {
-    try { await post("/api/stop"); }
-    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
-  };
-
-  const source = new EventSource("/api/logs");
-  source.onmessage = (event) => {
-    try { addLog(JSON.parse(event.data)); } catch (_) {}
-  };
-  source.onerror = () => {
-    // Browser will automatically reconnect SSE.
-  };
-
-  async function refresh() {
+  async function refreshStatus() {
     try {
-      const r = await fetch("/api/status", {cache:"no-store"});
-      const s = await r.json();
-      setState(!!s.running, !!s.paused);
-    } catch (_) {}
+      const data = await apiCall("/api/status");
+      setStatus(data.status || "idle");
+    } catch (e) {
+      console.warn("status check failed", e);
+    }
   }
-  setInterval(refresh, 1000);
-  refresh();
+
+  // ============================================================
+  // أحداث الأزرار
+  // ============================================================
+  $btnStart.addEventListener("click", async () => {
+    const platform_url = $url.value.trim();
+    const username     = $user.value.trim();
+    const password     = $pass.value.trim();
+
+    if (!platform_url || !username || !password) {
+      showToast("⚠️ الرجاء إدخال جميع البيانات المطلوبة", "error");
+      return;
+    }
+
+    try {
+      $btnStart.disabled = true;
+      $btnStart.textContent = "⏳ جاري البدء...";
+
+      const data = await apiCall("/api/start", {
+        method: "POST",
+        body: { platform_url, username, password },
+      });
+
+      showToast("✅ " + (data.message || "تم بدء العملية"), "success");
+      await refreshStatus();
+    } catch (e) {
+      showToast("❌ " + e.message, "error");
+      $btnStart.disabled = false;
+    } finally {
+      $btnStart.textContent = "▶️ ابدأ الحل التلقائي";
+    }
+  });
+
+  $btnPause.addEventListener("click", async () => {
+    try {
+      const data = await apiCall("/api/pause", { method: "POST" });
+      showToast(data.status === "paused" ? "⏸️ تم الإيقاف المؤقت"
+                                          : "▶️ تم الاستئناف", "info");
+      await refreshStatus();
+    } catch (e) {
+      showToast("❌ " + e.message, "error");
+    }
+  });
+
+  $btnStop.addEventListener("click", async () => {
+    try {
+      await apiCall("/api/stop", { method: "POST" });
+      showToast("🛑 تم الإيقاف النهائي", "info");
+      await refreshStatus();
+    } catch (e) {
+      showToast("❌ " + e.message, "error");
+    }
+  });
+
+  // ============================================================
+  // المتابعة الدورية للحالة
+  // ============================================================
+  function startStatusPolling() {
+    refreshStatus();
+    setInterval(refreshStatus, 2500);
+  }
+
+  // ============================================================
+  // التهيئة
+  // ============================================================
+  document.addEventListener("DOMContentLoaded", () => {
+    connectLogsStream();
+    startStatusPolling();
+  });
+
+  window.addEventListener("beforeunload", () => {
+    if (eventSource) {
+      try { eventSource.close(); } catch (e) {}
+    }
+  });
+
 })();
 </script>
 </body>
