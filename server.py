@@ -321,6 +321,7 @@ def requests_probe(url: str) -> dict[str, Any]:
             "status_code": response.status_code,
             "final_url": response.url,
             "content_type": response.headers.get("content-type", ""),
+            "allow": response.headers.get("allow", ""),
             "bytes": len(response.content),
         }
     except requests.RequestException as exc:
@@ -342,10 +343,19 @@ def run_job(payload: dict[str, Any], job_id: str) -> None:
 
         try:
             probe = requests_probe(url)
-            log(
-                f"HTTP probe: {probe['status_code']} | "
-                f"{probe['content_type']} | {probe['bytes']} bytes"
-            )
+            status_code = probe["status_code"]
+            if status_code == 405:
+                allow = f" | Allow: {probe['allow']}" if probe.get("allow") else ""
+                log(
+                    f"HTTP probe: 405 Method Not Allowed{allow} — "
+                    "تم تجاهلها وسيستمر تشغيل المتصفح.",
+                    "warning",
+                )
+            else:
+                log(
+                    f"HTTP probe: {status_code} | "
+                    f"{probe['content_type']} | {probe['bytes']} bytes"
+                )
         except Exception as exc:
             log(f"تعذر فحص HTTP الأولي: {exc}", "warning")
 
