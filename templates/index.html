@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Education Automation Framework</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --card: #121a2e;
+      --border: #24304d;
+      --text: #eef2ff;
+      --muted: #9aa7c7;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --blue: #3b82f6;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh; font-family: Tahoma, Arial, sans-serif;
+      background: radial-gradient(circle at top, #162344, var(--bg) 55%);
+      color: var(--text);
+    }
+    .container { max-width: 1050px; margin: auto; padding: 28px 16px 50px; }
+    .hero { margin-bottom: 20px; }
+    .hero h1 { margin: 0 0 8px; font-size: 30px; }
+    .hero p { color: var(--muted); margin: 0; line-height: 1.8; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+    .card {
+      background: rgba(18,26,46,.94); border: 1px solid var(--border);
+      border-radius: 18px; padding: 20px; box-shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+    .full { grid-column: 1 / -1; }
+    label { display:block; margin: 0 0 8px; font-weight: 700; }
+    input {
+      width: 100%; padding: 13px 14px; border-radius: 11px;
+      border: 1px solid #31405f; background: #0b1223; color: var(--text);
+      outline: none; margin-bottom: 14px;
+    }
+    input:focus { border-color: var(--blue); }
+    .actions { display:flex; gap:10px; flex-wrap:wrap; margin-top: 4px; }
+    button {
+      border: 0; border-radius: 11px; color: white; padding: 12px 18px;
+      font-weight: 800; cursor: pointer; transition: .15s transform, .15s opacity;
+    }
+    button:hover { transform: translateY(-1px); }
+    button:disabled { opacity:.45; cursor:not-allowed; transform:none; }
+    .start { background: var(--green); color:#06210e; }
+    .pause { background: var(--yellow); color:#211b00; }
+    .resume { background: var(--blue); }
+    .stop { background: var(--red); }
+    .status { display:flex; gap:10px; align-items:center; margin-top: 14px; color: var(--muted); }
+    .dot { width:10px; height:10px; border-radius:50%; background:#64748b; }
+    .dot.running { background: var(--green); box-shadow:0 0 14px rgba(34,197,94,.7); }
+    .log {
+      height: 390px; overflow:auto; background:#05070d; border:1px solid #1e293b;
+      border-radius:14px; padding:14px; direction:ltr; font-family:
+      ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    .line { padding:4px 0; white-space:pre-wrap; word-break:break-word; }
+    .time { color:#64748b; }
+    .info { color:#dbeafe; } .success { color:#86efac; }
+    .warning { color:#fde68a; } .error { color:#fca5a5; }
+    .support { line-height:1.8; }
+    .support a { color:#7dd3fc; font-weight:800; text-decoration:none; }
+    .notice { font-size: 13px; color:#aeb9d4; background:#0b1223; border-radius:10px; padding:10px 12px; margin-top:12px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } .full { grid-column:auto; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <section class="hero">
+    <h1>منصة أتمتة تعليمية</h1>
+    <p>إطار عام لفحص المنصات والتحكم بجلسة المتصفح مع سجل حي ومعالجة أخطاء قوية.</p>
+  </section>
+
+  <div class="grid">
+    <section class="card">
+      <h2>إعداد المهمة</h2>
+      <label for="url">رابط المنصة</label>
+      <input id="url" type="url" placeholder="https://example.com" autocomplete="url">
+
+      <label for="username">اسم المستخدم / الرقم</label>
+      <input id="username" type="text" autocomplete="username">
+
+      <label for="password">كلمة المرور</label>
+      <input id="password" type="password" autocomplete="current-password">
+
+      <div class="actions">
+        <button class="start" id="startBtn">ابدأ الأتمتة</button>
+        <button class="pause" id="pauseBtn">إيقاف مؤقت</button>
+        <button class="resume" id="resumeBtn">استئناف</button>
+        <button class="stop" id="stopBtn">إيقاف نهائي</button>
+      </div>
+
+      <div class="status">
+        <span class="dot" id="dot"></span>
+        <span id="statusText">جاهز</span>
+      </div>
+
+      <div class="notice">
+        للاستخدام على الأنظمة التي تملك تصريحاً لاختبارها أو أتمتتها. لا يقوم هذا المشروع
+        بحل أو إرسال إجابات اختبارات/واجبات نيابةً عن الطالب.
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>سجل التشغيل</h2>
+      <div id="log" class="log"></div>
+    </section>
+
+    <section class="card full support">
+      <h2>الدعم والتواصل مع المطور</h2>
+      <p>ضع بيانات التواصل الخاصة بك هنا قبل النشر:</p>
+      <p>
+        Telegram:
+        <a href="https://t.me/your_username" target="_blank" rel="noopener">@your_username</a>
+        <br>
+        WhatsApp:
+        <a href="https://wa.me/201000000000" target="_blank" rel="noopener">+20 100 000 0000</a>
+      </p>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  const logBox = $("log");
+  const startBtn = $("startBtn"), pauseBtn = $("pauseBtn");
+  const resumeBtn = $("resumeBtn"), stopBtn = $("stopBtn");
+  const dot = $("dot"), statusText = $("statusText");
+
+  function addLog(item) {
+    const row = document.createElement("div");
+    row.className = "line " + (item.level || "info");
+    const time = document.createElement("span");
+    time.className = "time";
+    time.textContent = `[${item.time}] `;
+    const msg = document.createElement("span");
+    msg.textContent = item.message || "";
+    row.append(time, msg);
+    logBox.appendChild(row);
+    logBox.scrollTop = logBox.scrollHeight;
+  }
+
+  function setState(running, paused) {
+    dot.classList.toggle("running", running);
+    statusText.textContent = !running ? "جاهز" : (paused ? "متوقف مؤقتاً" : "يعمل");
+    startBtn.disabled = running;
+    pauseBtn.disabled = !running || paused;
+    resumeBtn.disabled = !running || !paused;
+    stopBtn.disabled = !running;
+  }
+
+  async function post(path) {
+    const response = await fetch(path, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: path === "/api/start" ? JSON.stringify({
+        url: $("url").value.trim(),
+        username: $("username").value.trim(),
+        password: $("password").value
+      }) : "{}"
+    });
+    const data = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    return data;
+  }
+
+  startBtn.onclick = async () => {
+    try { await post("/api/start"); }
+    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
+  };
+  pauseBtn.onclick = async () => {
+    try { await post("/api/pause"); }
+    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
+  };
+  resumeBtn.onclick = async () => {
+    try { await post("/api/resume"); }
+    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
+  };
+  stopBtn.onclick = async () => {
+    try { await post("/api/stop"); }
+    catch (e) { addLog({time:new Date().toLocaleString(), level:"error", message:e.message}); }
+  };
+
+  const source = new EventSource("/api/logs");
+  source.onmessage = (event) => {
+    try { addLog(JSON.parse(event.data)); } catch (_) {}
+  };
+  source.onerror = () => {
+    // Browser will automatically reconnect SSE.
+  };
+
+  async function refresh() {
+    try {
+      const r = await fetch("/api/status", {cache:"no-store"});
+      const s = await r.json();
+      setState(!!s.running, !!s.paused);
+    } catch (_) {}
+  }
+  setInterval(refresh, 1000);
+  refresh();
+})();
+</script>
+</body>
+</html>
